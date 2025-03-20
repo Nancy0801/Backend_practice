@@ -1,0 +1,10 @@
+whenever you have to get the content for gitignore file , then use gitignore generator to generate the content of this file for node.
+https://mrkandreev.name/snippets/gitignore-generator/  : link of website
+
+difference between dependency and dev dependency is that the dev dependencies are only used for development purpose , these does not go in production.
+
+
+whenever you try to talk with database then always remember database is in other continent that means it can be time consuming to talk with it , so always use async await whenever to talk with database.
+also there can be many errors while interacting with db so always use try catch block to deal with errors.
+
+whenever you will make changes to env file , you hhave to restart the server , nodemon will not do anything in that case.
