@@ -8,3 +8,27 @@ whenever you try to talk with database then always remember database is in other
 also there can be many errors while interacting with db so always use try catch block to deal with errors.
 
 whenever you will make changes to env file , you hhave to restart the server , nodemon will not do anything in that case.
+
+middleswares are used using app.use()
+
+sometimes data is from url also , so to understand that we use       app.use(express.urlencoded({extended: true}))    
+
+app.use(express.static("public"))    is used to store static files like images pdfs etc.
+
+cookie-parser() is used to use crud operations on the users cookies that is we can access them and use them.
+
+mongoose-aggregate-paginate-v2 is the plugin which simplifies complex mongodb queries and is used to write aggregation queries.
+
+bcrypt and bcryptjs both are different: 
+bcrypt is a library for nodejs and bcryptjs is optimised in plain javascript and with zero dependencies.
+
+these bcrypt and bcryptjs is used for hashing the password to store securly in db.
+
+jsonwebtoken is used to generate tokens for user authentication and secrure transmission.
+
+bcrypt password encryption is done using pre middleswares
+
+jwt is a bearer token that is anyone bearing this token , we will send data to him.
+
+access token is not stored in database and refresh token is stored in database.
+
