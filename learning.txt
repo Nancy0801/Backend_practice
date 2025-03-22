@@ -32,3 +32,6 @@ jwt is a bearer token that is anyone bearing this token , we will send data to h
 
 access token is not stored in database and refresh token is stored in database.
 
+use fileUpload or multer for uploading files and file uploading is not done on own server , either use AWS or specialised services.
+
+ 
