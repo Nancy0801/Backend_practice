@@ -34,4 +34,10 @@ access token is not stored in database and refresh token is stored in database.
 
 use fileUpload or multer for uploading files and file uploading is not done on own server , either use AWS or specialised services.
 
- 
+diff between access token and refresh token:
+access token : short lived and user is validated through access token only.
+refresh token: long lived and stored in db and given to user as well
+when access is expired , user just provide the refresh token and new access token is geenrated for user , he had no need to re enter the password.
+
+middlewares are used mostly in routes
+
