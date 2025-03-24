@@ -237,9 +237,132 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
   }
 });
 
+const changeCurrentPassword = asyncHandler(async(req, res) => {
+  // get current password, new password and confirm password from frontend
+  // validation - not empty
+  // check if new password and confirm password are same
+  // check if current password is correct
+  // update password in db
+  // return response
+
+  const {oldPassword , newPassword } = req.body;
+
+  // again auth middleware is used to acces user id from user object
+  const user = await User.findById(req.user?._id);
+  const isPasswordCorrect = await user.isPasswordCorrect(oldPassword);
+  if(!isPasswordCorrect){
+    throw new ApiError(401, "Invalid credentials");
+  }
+
+  user.password = newPassword;
+  await user.save({ validateBeforeSave: false });
+
+  return res.status(200).json(
+    new ApiResponse(200, {}, "Password changed successfully")
+  )
+})
+
+const getCurrentUser = asyncHandler(async(req,res) => {
+
+  return res.status(200).json(
+    new ApiResponse(200, req.user, "User found successfully")
+  )
+})
+
+const updateAccountDetails = asyncHandler(async(req , res) => {
+  const {fullname , email } = req.body;
+
+  if(!fullname || !email){
+    throw new ApiError(400, "All fields are required");
+  }
+
+  const user = await User.findByIdAndUpdate(req.user?._id,  {
+      $set: {
+        fullname: fullname,
+        email: email
+      }
+    } , 
+    {new: true}
+  ).select("-password")
+
+  return res.status(200).json(
+    new ApiResponse(200, user, "User updated successfully")
+  )
+});
+
+//update files
+const updateUserAvatar = asyncHandler(async(req,res) => {
+  //two middlewares are used : auth middleware and multer middleware
+  // get avatar from frontend
+  // validation - not empty
+  // upload avatar on cloudinary
+  // check if avatar uploaded correctly
+  // update avatar in db
+  // return response
+
+  const avatarLocalPath = req.file?.path;   //in this we have .file instead of .files as we just need one file but in register we have avatar as well as cover image that is why we have .files there
+
+  if(!avatarLocalPath){
+    throw new ApiError(400, "Avatar is required");
+  }
+
+  const avatar = await uploadOnCloudinary(avatarLocalPath);
+
+  if(!avatar.url){
+    throw new ApiError(400, "Error while uploading on cloudinary");
+  }
+
+  const user = await User.findByIdAndUpdate(req.user?._id, {
+    $set: {
+      avatar: avatar.url
+    }
+  }, {new: true}).select("-password");
+
+  return res.status(200).json(
+    new ApiResponse(200, user, "Avatar updated successfully")
+  )
+})
+
+const updateUserCoverImage = asyncHandler(async(req,res) => {
+  //two middlewares are used : auth middleware and multer middleware
+  // get avatar from frontend
+  // validation - not empty
+  // upload avatar on cloudinary
+  // check if avatar uploaded correctly
+  // update avatar in db
+  // return response
+
+  const coverImageLocalPath = req.file?.path;   //in this we have .file instead of .files as we just need one file but in register we have avatar as well as cover image that is why we have .files there
+
+  if(!coverImageLocalPath){
+    throw new ApiError(400, "Cover Image is required");
+  }
+
+  const coverImage = await uploadOnCloudinary(coverImageLocalPath);
+
+  if(!coverImage.url){
+    throw new ApiError(400, "Error while uploading on cloudinary");
+  }
+
+  const user = await User.findByIdAndUpdate(req.user?._id, {
+    $set: {
+     coverImage: coverImage.url
+    }
+  }, {new: true}).select("-password");
+
+  return res.status(200).json(
+    new ApiResponse(200, user, "coverImage updated successfully")
+  )
+})
+
 export { 
     registerUser, 
     loginUser, 
     logoutUser, 
-    refreshAccessToken 
+    refreshAccessToken ,
+    changeCurrentPassword,
+    getCurrentUser,
+    updateAccountDetails,
+    updateUserAvatar,
+    updateUserCoverImage,
 };
